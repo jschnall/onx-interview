@@ -4,6 +4,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -155,7 +157,10 @@ fun Forecast(
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.padding(16.dp)
             )
-            LazyRow {
+            LazyRow(
+                contentPadding = PaddingValues(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
                 items(items = weatherList) { weather ->
                     ForecastItem(
                         weather = weather
@@ -168,52 +173,54 @@ fun Forecast(
 
 @Composable
 fun ForecastItem(weather: Weather) {
-    Column(
-        modifier = Modifier
-            .wrapContentSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = dateToDay(weather.dateTime),
-            style = MaterialTheme.typography.titleLarge
-        )
-        Text(
-            modifier = Modifier.padding(bottom = 16.dp),
-            text = dateToTime(weather.dateTime),
-            style = MaterialTheme.typography.titleSmall
-        )
-        AsyncImage(
+    Card {
+        Column(
             modifier = Modifier
-                .height(64.dp)
-                .width(64.dp),
-            model = weatherIconToUrl(weather.icon),
-            contentDescription = null,
-            contentScale = ContentScale.FillBounds
-        )
-        Text(
-            modifier = Modifier.padding(top = 16.dp),
-            text = "${weather.tempMax}° / ${weather.tempMin}°",
-            style = MaterialTheme.typography.bodyLarge
-        )
-        Text(
-            text = weather.description,
-            style = MaterialTheme.typography.bodyMedium
-        )
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-            verticalAlignment = Alignment.CenterVertically,
+                .wrapContentSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Icon(
-                painter = painterResource(R.drawable.wind),
-                contentDescription = null,
-                modifier = Modifier.size(width = 16.dp, height = 16.dp)
+            Text(
+                text = dateToDay(weather.dateTime),
+                style = MaterialTheme.typography.titleLarge
             )
             Text(
-                text = "${weather.windSpeed.toInt()} mph from ${windAngleToStr(weather.windDirection)}",
+                modifier = Modifier.padding(bottom = 16.dp),
+                text = dateToTime(weather.dateTime),
+                style = MaterialTheme.typography.titleSmall
+            )
+            AsyncImage(
+                modifier = Modifier
+                    .height(64.dp)
+                    .width(64.dp),
+                model = weatherIconToUrl(weather.icon),
+                contentDescription = null,
+                contentScale = ContentScale.FillBounds
+            )
+            Text(
+                modifier = Modifier.padding(top = 16.dp),
+                text = "${weather.tempMax}° / ${weather.tempMin}°",
+                style = MaterialTheme.typography.bodyLarge
+            )
+            Text(
+                text = weather.description,
                 style = MaterialTheme.typography.bodyMedium
             )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.wind),
+                    contentDescription = null,
+                    modifier = Modifier.size(width = 16.dp, height = 16.dp)
+                )
+                Text(
+                    text = "${weather.windSpeed.toInt()} mph from ${windAngleToStr(weather.windDirection)}",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
         }
     }
 }
