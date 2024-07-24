@@ -1,0 +1,10 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Mapbox Test</string>
+    <string name="mapbox_access_token" translatable="false" tools:ignore="UnusedResources">pk.eyJ1IjoiamJhcnR6IiwiYSI6ImNqcW55YzI0MjBhdjMzeHBwbGRidDMxOTUifQ.1jRgG8StatIBBqe5i8744A</string>
+
+    <string name="please_wait">Please Wait&#8230;</string>
+    <string name="back">Back</string>
+
+    <string name="map">Map</string>
+    <string name="location">Location</string>
+</resources>
