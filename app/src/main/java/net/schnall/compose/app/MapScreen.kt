@@ -103,11 +103,13 @@ fun MapScreen(
 
     }
     uiState.currentLocation?.let { location ->
-        Forecast(
-            location.name,
-            uiState.weatherList,
-            onLocationChange
-        )
+        if (uiState.weatherList.isNotEmpty()) {
+            Forecast(
+                location.name,
+                uiState.weatherList,
+                onLocationChange
+            )
+        }
     }
 
     if (uiState.errorMessage != null) {

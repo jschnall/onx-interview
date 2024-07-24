@@ -26,7 +26,7 @@ class MapViewModel(private val weatherRepo: WeatherRepo) : ViewModel() {
             weatherRepo.listLocations()
                 .catch { exception ->
                     _uiState.update {
-                        it.copy(errorMessage = exception.toString(), isLoading = false)
+                        it.copy(errorMessage = exception.message, isLoading = false)
                     }
                 }
                 .collect { locations ->
@@ -39,19 +39,29 @@ class MapViewModel(private val weatherRepo: WeatherRepo) : ViewModel() {
 
     fun addLocation(point: Point) {
         _uiState.update {
-            it.copy(isLoading = true)
+            it.copy(
+                isLoading = true,
+                errorMessage = null,
+                currentLocation = null,
+                weatherList = emptyList()
+            )
         }
 
         viewModelScope.launch {
             weatherRepo.fetchLocation(lat = point.latitude(), lon = point.longitude())
                 .catch { exception ->
                     _uiState.update {
-                        it.copy(isLoading = false, errorMessage = exception.toString())
+                        it.copy(isLoading = false, errorMessage = exception.message)
                     }
                 }
                 .collect { location ->
                     location?.let {
-                        updateLocationInner(it)
+                        updateForecast(it)
+                    } ?: run {
+                        // Failed find location to reverse geocode to
+                        _uiState.update {
+                            it.copy(isLoading = false, errorMessage = "Nearby location not found")
+                        }
                     }
                 }
         }
@@ -59,12 +69,17 @@ class MapViewModel(private val weatherRepo: WeatherRepo) : ViewModel() {
 
     fun updateLocation(location: Location?) {
         _uiState.update {
-            it.copy(isLoading = true)
+            it.copy(
+                isLoading = true,
+                errorMessage = null,
+                currentLocation = location,
+                weatherList = emptyList()
+            )
         }
 
         location?.let {
             viewModelScope.launch {
-                updateLocationInner(location)
+                updateForecast(location)
             }
         } ?: run {
             _uiState.update {
@@ -77,11 +92,11 @@ class MapViewModel(private val weatherRepo: WeatherRepo) : ViewModel() {
         }
     }
 
-    private suspend fun updateLocationInner(location: Location) {
+    private suspend fun updateForecast(location: Location) {
         weatherRepo.fetchForecast(location.name)
             .catch { e ->
                 _uiState.update {
-                    it.copy(isLoading = false, errorMessage = e.toString())
+                    it.copy(isLoading = false, errorMessage = e.message)
                 }
             }
             .collect { weatherList ->

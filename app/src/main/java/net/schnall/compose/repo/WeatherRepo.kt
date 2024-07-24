@@ -2,6 +2,7 @@ package net.schnall.compose.repo
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.datetime.Clock
@@ -32,25 +33,36 @@ class WeatherRepoImpl(
         return flow {
             locationDao.getByName(locationName).collect { location ->
                 if (forceRefresh || isForecastExpired(location)) {
-                    weatherApi.fetchForecasts(location.name).flowOn(Dispatchers.IO).collect { forecasts ->
-                        weatherDao.deleteByLocation(locationName)
-                        val weatherList = forecasts.map { forecast ->
-                            Weather(
-                                location = locationName,
-                                dateTime = Instant.fromEpochSeconds(forecast.dt).toLocalDateTime(
-                                    TimeZone.currentSystemDefault()),
-                                description = forecast.weather.firstOrNull()?.description ?: "",
-                                icon = forecast.weather.firstOrNull()?.icon ?: "",
-                                windDirection = forecast.wind.deg,
-                                windSpeed = forecast.wind.speed,
-                                tempMin = forecast.main.temp_min.toInt(),
-                                tempMax = forecast.main.temp_max.toInt(),
-                            )
+                    weatherApi.fetchForecasts(location.name)
+                        .flowOn(Dispatchers.IO)
+                        .catch { e ->
+                            if (e is retrofit2.HttpException) {
+                                when (e.code()) {
+                                    404 -> throw Exception("Weather unavailable for location")
+                                    else -> throw e
+                                }
+                            }
+                            throw e
                         }
-                        weatherDao.upsertAll(*weatherList.toTypedArray())
-                        locationDao.upsertAll(location.copy(forecastUpdated = clock.now().toLocalDateTime(TimeZone.currentSystemDefault())))
-                        emit(weatherList)
-                    }
+                        .collect { forecasts ->
+                            weatherDao.deleteByLocation(locationName)
+                            val weatherList = forecasts.map { forecast ->
+                                Weather(
+                                    location = locationName,
+                                    dateTime = Instant.fromEpochSeconds(forecast.dt).toLocalDateTime(
+                                        TimeZone.currentSystemDefault()),
+                                    description = forecast.weather.firstOrNull()?.description ?: "",
+                                    icon = forecast.weather.firstOrNull()?.icon ?: "",
+                                    windDirection = forecast.wind.deg,
+                                    windSpeed = forecast.wind.speed,
+                                    tempMin = forecast.main.temp_min.toInt(),
+                                    tempMax = forecast.main.temp_max.toInt(),
+                                )
+                            }
+                            weatherDao.upsertAll(*weatherList.toTypedArray())
+                            locationDao.upsertAll(location.copy(forecastUpdated = clock.now().toLocalDateTime(TimeZone.currentSystemDefault())))
+                            emit(weatherList)
+                        }
                 } else {
                     weatherDao.getByLocation(locationName).flowOn(Dispatchers.IO).collect { weatherList ->
                         emit(weatherList)
