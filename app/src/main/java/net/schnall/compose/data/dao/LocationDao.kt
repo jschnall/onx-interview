@@ -6,7 +6,6 @@ import androidx.room.Query
 import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
 import net.schnall.compose.data.Location
-import net.schnall.compose.network.Weather
 
 @Dao
 interface LocationDao {

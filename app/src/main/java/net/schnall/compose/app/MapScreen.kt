@@ -26,7 +26,6 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
