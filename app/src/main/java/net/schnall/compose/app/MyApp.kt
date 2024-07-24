@@ -13,7 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
-import net.schnall.compose.app.theme.ComposeStarterTheme
+import net.schnall.compose.app.theme.OnXInterviewTheme
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.KoinContext
 
@@ -67,7 +67,7 @@ fun MyApp(
 @Composable
 fun MyAppPreview() {
     KoinContext {
-        ComposeStarterTheme {
+        OnXInterviewTheme {
             MyApp(exitApp = {})
         }
     }
@@ -77,7 +77,7 @@ fun MyAppPreview() {
 @Composable
 fun MyAppNightPreview() {
     KoinContext {
-        ComposeStarterTheme {
+        OnXInterviewTheme {
             MyApp(exitApp = {})
         }
     }

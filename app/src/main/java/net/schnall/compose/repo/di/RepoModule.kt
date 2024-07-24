@@ -17,7 +17,7 @@ val repoModule = module {
         Room.databaseBuilder(
             get(),
             AppDatabase::class.java,
-            "GameDatabase"
+            "WeatherDatabase"
         ).build()
     }
     single<LocationDao> { get<AppDatabase>().locationDao() }

@@ -58,7 +58,7 @@ import kotlinx.datetime.plus
 import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.datetime.toLocalDateTime
 import net.schnall.compose.R
-import net.schnall.compose.app.theme.ComposeStarterTheme
+import net.schnall.compose.app.theme.OnXInterviewTheme
 import net.schnall.compose.data.Location
 import net.schnall.compose.data.Weather
 import java.time.format.DateTimeFormatter
@@ -227,7 +227,6 @@ fun LocationMenuBox(
     mapViewportState: MapViewportState? = null
 ) {
     var expanded by remember { mutableStateOf(false) }
-    var selectedOptionText by remember { mutableStateOf(currentLocation?.name ?: "") }
 
     ExposedDropdownMenuBox(
         expanded = expanded,
@@ -237,7 +236,7 @@ fun LocationMenuBox(
             modifier = Modifier.menuAnchor().fillMaxWidth(),
             readOnly = true,
             singleLine = true,
-            value = selectedOptionText,
+            value = currentLocation?.name ?: "",
             onValueChange = {},
             label = { Text(stringResource(R.string.location)) },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
@@ -253,7 +252,6 @@ fun LocationMenuBox(
                 DropdownMenuItem(
                     text = { Text(text = location.name) },
                     onClick = {
-                        selectedOptionText = location.name
                         expanded = false
                         onLocationChange(location)
                         mapViewportState?.flyTo(
@@ -345,7 +343,7 @@ fun LocationMenuBoxPreview() {
     val sf = Location("San Francisco, CA, USA", 0.0, 0.0, forecastUpdated = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()))
     val la = Location("Los Angeles, CA, USA", 0.0, 0.0, forecastUpdated = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()))
 
-    ComposeStarterTheme {
+    OnXInterviewTheme {
         LocationMenuBox (
             currentLocation = la,
             locations = listOf(ny, sf, la),
@@ -357,7 +355,7 @@ fun LocationMenuBoxPreview() {
 @Preview(showBackground = true, widthDp = 320)
 @Composable
 fun ForecastItemPreview() {
-    ComposeStarterTheme {
+    OnXInterviewTheme {
         ForecastItem(
             Weather(
                 location = "Los Angeles, CA, USA",
@@ -376,7 +374,7 @@ fun ForecastItemPreview() {
 @Preview(showBackground = true, widthDp = 320)
 @Composable
 fun ForecastPreview() {
-    ComposeStarterTheme {
+    OnXInterviewTheme {
         Forecast(
             locationName = "Los Angeles, CA, USA",
             weatherList = listOf(
@@ -418,7 +416,7 @@ fun ForecastPreview() {
 @Preview(showBackground = true, widthDp = 320)
 @Composable
 fun MapScreenPreviewLoading() {
-    ComposeStarterTheme {
+    OnXInterviewTheme {
        MapScreen(
            uiState = MapUiState(isLoading = true),
            showSnackbar = { _, _ -> },
@@ -435,7 +433,7 @@ fun MapScreenPreviewForecast() {
     val sf = Location("San Francisco, CA, USA", 0.0, 0.0, forecastUpdated = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()))
     val la = Location("Los Angeles, CA, USA", 0.0, 0.0, forecastUpdated = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()))
 
-    ComposeStarterTheme {
+    OnXInterviewTheme {
         MapScreen(
             uiState = MapUiState(
                 locations = listOf(ny, sf, la),

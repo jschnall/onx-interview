@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import net.schnall.compose.R
-import net.schnall.compose.app.theme.ComposeStarterTheme
+import net.schnall.compose.app.theme.OnXInterviewTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,7 +48,7 @@ fun MyAppBar(
 @Preview
 @Composable
 fun MyAppBarPreview() {
-    ComposeStarterTheme {
+    OnXInterviewTheme {
         MyAppBar(canNavigateBack = true, navigateUp = { })
     }
 }

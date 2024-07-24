@@ -55,6 +55,9 @@ class MapViewModel(private val weatherRepo: WeatherRepo) : ViewModel() {
                     }
                 }
                 .collect { location ->
+                    _uiState.update {
+                        it.copy(currentLocation = location)
+                    }
                     location?.let {
                         updateForecast(it)
                     } ?: run {
@@ -102,7 +105,6 @@ class MapViewModel(private val weatherRepo: WeatherRepo) : ViewModel() {
             .collect { weatherList ->
                 _uiState.update {
                     it.copy(
-                        currentLocation = location,
                         weatherList = weatherList,
                         isLoading = false,
                         errorMessage = null
