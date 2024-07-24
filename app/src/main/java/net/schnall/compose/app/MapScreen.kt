@@ -106,8 +106,7 @@ fun MapScreen(
         if (uiState.weatherList.isNotEmpty()) {
             Forecast(
                 location.name,
-                uiState.weatherList,
-                onLocationChange
+                uiState.weatherList
             )
         }
     }
@@ -139,27 +138,29 @@ fun MyMap(
 @Composable
 fun Forecast(
     locationName: String,
-    weatherList: List<Weather>,
-    onLocationChange: (Location?) -> Unit
+    weatherList: List<Weather>
 ) {
+    var showBottomSheet by remember { mutableStateOf(true) }
     val sheetState = rememberModalBottomSheetState()
 
-    ModalBottomSheet(
-        onDismissRequest = {
-            onLocationChange(null)
-        },
-        sheetState = sheetState
-    ) {
-        Text(
-            text = locationName,
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(16.dp)
-        )
-        LazyRow {
-            items(items = weatherList) { weather ->
-                ForecastItem(
-                    weather = weather
-                )
+    if (showBottomSheet) {
+        ModalBottomSheet(
+            onDismissRequest = {
+                showBottomSheet = false
+            },
+            sheetState = sheetState
+        ) {
+            Text(
+                text = locationName,
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(16.dp)
+            )
+            LazyRow {
+                items(items = weatherList) { weather ->
+                    ForecastItem(
+                        weather = weather
+                    )
+                }
             }
         }
     }
@@ -409,8 +410,7 @@ fun ForecastPreview() {
                     tempMin = 60,
                     tempMax = 72
                 )
-            ),
-            onLocationChange = {}
+            )
         )
     }
 }
