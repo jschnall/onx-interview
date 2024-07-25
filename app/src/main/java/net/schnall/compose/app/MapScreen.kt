@@ -1,6 +1,8 @@
 package net.schnall.compose.app
 
+import android.content.res.Configuration
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +19,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,6 +28,7 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -162,9 +166,19 @@ fun Forecast(
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 items(items = weatherList) { weather ->
-                    ForecastItem(
-                        weather = weather
-                    )
+                    if (isSystemInDarkTheme())
+                        OutlinedCard {
+                            ForecastItem(
+                                weather = weather
+                            )
+                        }
+                    else {
+                        Card {
+                            ForecastItem(
+                                weather = weather
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -173,54 +187,52 @@ fun Forecast(
 
 @Composable
 fun ForecastItem(weather: Weather) {
-    Card {
-        Column(
+    Column(
+        modifier = Modifier
+            .wrapContentSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = dateToDay(weather.dateTime),
+            style = MaterialTheme.typography.titleLarge
+        )
+        Text(
+            modifier = Modifier.padding(bottom = 16.dp),
+            text = dateToTime(weather.dateTime),
+            style = MaterialTheme.typography.titleSmall
+        )
+        AsyncImage(
             modifier = Modifier
-                .wrapContentSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+                .height(64.dp)
+                .width(64.dp),
+            model = weatherIconToUrl(weather.icon),
+            contentDescription = null,
+            contentScale = ContentScale.FillBounds
+        )
+        Text(
+            modifier = Modifier.padding(top = 16.dp),
+            text = "${weather.tempMax}° / ${weather.tempMin}°",
+            style = MaterialTheme.typography.bodyLarge
+        )
+        Text(
+            text = weather.description,
+            style = MaterialTheme.typography.bodyMedium
+        )
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(
-                text = dateToDay(weather.dateTime),
-                style = MaterialTheme.typography.titleLarge
-            )
-            Text(
-                modifier = Modifier.padding(bottom = 16.dp),
-                text = dateToTime(weather.dateTime),
-                style = MaterialTheme.typography.titleSmall
-            )
-            AsyncImage(
-                modifier = Modifier
-                    .height(64.dp)
-                    .width(64.dp),
-                model = weatherIconToUrl(weather.icon),
+            Icon(
+                painter = painterResource(R.drawable.wind),
                 contentDescription = null,
-                contentScale = ContentScale.FillBounds
+                modifier = Modifier.size(width = 16.dp, height = 16.dp)
             )
             Text(
-                modifier = Modifier.padding(top = 16.dp),
-                text = "${weather.tempMax}° / ${weather.tempMin}°",
-                style = MaterialTheme.typography.bodyLarge
-            )
-            Text(
-                text = weather.description,
+                text = "${weather.windSpeed.toInt()} mph from ${windAngleToStr(weather.windDirection)}",
                 style = MaterialTheme.typography.bodyMedium
             )
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.wind),
-                    contentDescription = null,
-                    modifier = Modifier.size(width = 16.dp, height = 16.dp)
-                )
-                Text(
-                    text = "${weather.windSpeed.toInt()} mph from ${windAngleToStr(weather.windDirection)}",
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
         }
     }
 }
