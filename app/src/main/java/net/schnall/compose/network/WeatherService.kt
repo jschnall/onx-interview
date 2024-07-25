@@ -12,5 +12,5 @@ interface WeatherService {
         @Query("lat") latitude: Double,
         @Query("lon") longitude: Double,
         @Query("limit") limit: Int
-    ): LocationResult
+    ): List<Location>
 }

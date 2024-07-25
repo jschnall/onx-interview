@@ -1,19 +1,18 @@
 package net.schnall.compose.network.di
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
+import kotlinx.serialization.json.Json
 import net.schnall.compose.BuildConfig
 import net.schnall.compose.network.WeatherApi
 import net.schnall.compose.network.WeatherApiImpl
 import net.schnall.compose.network.WeatherService
 import okhttp3.Interceptor
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import java.util.concurrent.TimeUnit
-
 
 private const val BASE_URL = "https://api.openweathermap.org/"
 private const val OPEN_WEATHER_MAP_APP_ID = "f29c7c77f7f5de2caa22ad9c92e2fe54"
@@ -22,16 +21,15 @@ fun networkModule() = module {
     single<WeatherApi> { WeatherApiImpl(get()) }
 
     single<WeatherService> {
+        val json = Json { ignoreUnknownKeys = true }
+
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(get())
-            .addConverterFactory(GsonConverterFactory.create(get()))
+            .addConverterFactory(
+                json.asConverterFactory("application/json; charset=UTF8".toMediaType()))
             .build()
             .create(WeatherService::class.java)
-    }
-
-    single<Gson> {
-        GsonBuilder().create()
     }
 
     single<OkHttpClient> {

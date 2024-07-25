@@ -1,33 +1,31 @@
 [versions]
-activity-compose = "1.9.0"
+activity-compose = "1.9.1"
 androidx-junit = "1.2.1"
 coil-compose = "2.5.0"
 compose-bom = "2024.06.00"
-compose-bom-version = "2024.06.00"
 core-ktx = "1.13.1"
 core-splashscreen = "1.0.1"
 datastore-preferences = "1.1.1"
 espresso-core = "3.6.1"
-gson = "2.10.1"
 junit = "4.13.2"
 koin = "3.5.3"
 kotlinx-datetime = "0.3.2"
-kotlinx-serialization-json = "1.6.0"
-lifecycle-runtime = "2.8.3"
+kotlinx-serialization-json = "1.6.3"
+lifecycle-runtime = "2.8.4"
 mapbox = "11.5.0"
 material = "1.6.8"
 material3 = "1.2.1"
 navigation = "2.7.7"
 okhttp = "5.0.0-alpha.9"
-paging-compose = "3.3.0"
-paging-runtime = "3.3.0"
-retrofit = "2.9.0"
+paging-compose = "3.3.1"
+paging-runtime = "3.3.1"
+retrofit = "2.11.0"
+converter-kotlinx-serialization = "2.11.0"
 room = "2.6.1"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-compose" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
-androidx-compose-bom-v20240200 = { module = "androidx.compose:compose-bom", version.ref = "compose-bom-version" }
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "core-splashscreen" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore-preferences" }
@@ -43,15 +41,13 @@ androidx-paging-compose = { module = "androidx.paging:paging-compose", version.r
 androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "paging-runtime" }
 androidx-ui = { module = "androidx.compose.ui:ui" }
 androidx-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
-androidx-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 androidx-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil-compose" }
-converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
-gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 mapbox = { module = "com.mapbox.maps:android", version.ref = "mapbox" }
 mapbox-compose = { module = "com.mapbox.extension:maps-compose", version.ref = "mapbox" }
+retrofit2-kotlinx-serialization-converter = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "converter-kotlinx-serialization" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }

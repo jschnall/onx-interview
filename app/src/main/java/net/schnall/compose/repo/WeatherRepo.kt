@@ -102,11 +102,12 @@ class WeatherRepoImpl(
     }
 
     override fun listLocations() = locationDao.getAll()
+
     override suspend fun clearLocations() {
         locationDao.deleteAll()
     }
 
-    fun isForecastExpired(location: Location): Boolean {
+    private fun isForecastExpired(location: Location): Boolean {
         return clock.now().epochSeconds - location.forecastUpdated.toInstant(TimeZone.currentSystemDefault()).epochSeconds > ONE_DAY
     }
 

@@ -158,7 +158,7 @@ fun Forecast(
                 modifier = Modifier.padding(16.dp)
             )
             LazyRow(
-                contentPadding = PaddingValues(16.dp),
+                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 items(items = weatherList) { weather ->
